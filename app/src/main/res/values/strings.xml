@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewsApi</string>
+    <string name="list_headline">Latest News</string>
 </resources>
