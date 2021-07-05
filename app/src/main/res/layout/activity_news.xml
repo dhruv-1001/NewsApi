@@ -1,37 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.NewsActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NewsActivity">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.example.newsapi.viewmodel.NewsViewModel" />
-    </data>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="32dp"
-            android:text="@string/list_headline"
-            android:textSize="32sp"
-            android:textColor="@color/appBlue"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:text="@{viewModel.displayText}"/>
-
-    </LinearLayout>
-</layout>
+</FrameLayout>

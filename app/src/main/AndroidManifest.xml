@@ -11,10 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApi">
-        <activity android:name=".activity.InAppBrowser"></activity>
-        <activity android:name=".activity.NewsActivity" />
+        <activity android:name=".ui.NewsActivity" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".ui.SplashActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.example.newsapi.util
+package com.example.newsapi.adapter
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonReader

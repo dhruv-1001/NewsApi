@@ -1,6 +1,6 @@
 package com.example.newsapi.apiservice
 
-import com.example.newsapi.util.NullStringAdapter
+import com.example.newsapi.adapter.NullStringAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
