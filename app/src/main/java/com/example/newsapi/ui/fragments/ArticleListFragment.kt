@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapi.R
 import com.example.newsapi.adapter.NewsListAdapter
@@ -42,6 +43,12 @@ class ArticleListFragment : Fragment() {
         newsListAdapter = NewsListAdapter()
         binding.articleList.adapter = newsListAdapter
 
+        newsListAdapter.navigateOnClickListener {
+            val bundle = Bundle()
+            bundle.apply { putSerializable("article", it) }
+            findNavController().navigate(R.id.action_articleListFragment_to_articleFragment, bundle)
+        }
+
         return binding.root
 
     }
@@ -52,6 +59,8 @@ class ArticleListFragment : Fragment() {
         viewModel.newsList.observe(viewLifecycleOwner, { response->
             when(response){
                 is State.Success -> {
+                    viewModel.viewProgressbar.value = false
+                    viewModel.viewArticles.value = true
                     response.data?.let {
                         newsListAdapter.data.submitList(it.articles.toList())
 //                        val pageAt = it.totalResults / 10 + 2

@@ -18,18 +18,32 @@
         android:layout_margin="4dp"
         android:background="@drawable/background_article">
 
-        <TextView
-            android:id="@+id/title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title Here"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:autoSizeTextType="uniform"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:padding="4dp"/>
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/articleImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_launcher_background"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title Here"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:autoSizeTextType="uniform"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
@@ -43,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description here"
-            articleDescription="@{article}"
             android:textColor="@color/white"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -58,7 +71,6 @@
             android:gravity="end"
             android:textSize="16sp"
             android:text="~Author"
-            articleAuthor="@{article}"
             android:textStyle="italic"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"

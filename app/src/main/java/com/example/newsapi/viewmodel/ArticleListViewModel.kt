@@ -20,7 +20,6 @@ class ArticleListViewModel(
     var newsList: MutableLiveData<State<ArticleResult>> = MutableLiveData()
     private var newsResponse: ArticleResult? = null
 
-    var displayText = MutableLiveData("Fetching Data")
     private var currentPage = 1
 
     init{
@@ -28,13 +27,10 @@ class ArticleListViewModel(
     }
 
     private fun fetchNews(page: Int) {
-        viewProgressbar.value = true
         CoroutineScope(Dispatchers.Main).launch{
             val callResponse = newsRepo.getTopHeadlines(page = page)
             newsList.postValue(convertResponse(callResponse))
         }
-        viewProgressbar.value = false
-        viewArticles.value = true
     }
 
     private fun convertResponse(callResponse: Response<ArticleResult>): State<ArticleResult>{
