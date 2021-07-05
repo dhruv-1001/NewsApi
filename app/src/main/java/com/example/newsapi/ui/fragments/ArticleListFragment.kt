@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapi.R
 import com.example.newsapi.adapter.NewsListAdapter
@@ -23,11 +25,14 @@ class ArticleListFragment : Fragment() {
     private lateinit var binding: FragmentArticleListBinding
     private lateinit var viewModel: ArticleListViewModel
     private lateinit var newsListAdapter: NewsListAdapter
+    var isLastPage = false
+    var isLoading = false
+    var isScrolling = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_article_list, container, false
@@ -41,7 +46,11 @@ class ArticleListFragment : Fragment() {
         binding.lifecycleOwner = this
 
         newsListAdapter = NewsListAdapter()
-        binding.articleList.adapter = newsListAdapter
+        binding.articleList.apply {
+            adapter = newsListAdapter
+            layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@ArticleListFragment.scrollListener)
+        }
 
         newsListAdapter.navigateOnClickListener {
             val bundle = Bundle()
@@ -63,7 +72,8 @@ class ArticleListFragment : Fragment() {
                     viewModel.viewArticles.value = true
                     response.data?.let {
                         newsListAdapter.data.submitList(it.articles.toList())
-//                        val pageAt = it.totalResults / 10 + 2
+                        val totalPages = it.totalResults / 10 + 2
+                        isLastPage = viewModel.currentPage == totalPages
                     }
                 }
                 is State.Error -> {
@@ -78,11 +88,35 @@ class ArticleListFragment : Fragment() {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
-    val scrollListener = object : RecyclerView.OnScrollListener(){
+    private val scrollListener = object : RecyclerView.OnScrollListener(){
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = binding.articleList.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
 
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = totalItemCount >= 10
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
+                    isTotalMoreThanVisible && isScrolling
+            if(shouldPaginate) {
+                viewModel.fetchNews()
+                isScrolling = false
+            }
+            else{
+                binding.articleList.setPadding(0,0,0,0)
+            }
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
         }
 
     }

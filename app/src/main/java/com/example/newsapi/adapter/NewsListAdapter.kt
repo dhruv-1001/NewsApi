@@ -1,6 +1,7 @@
 package com.example.newsapi.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,13 +51,24 @@ class NewsListAdapter : RecyclerView.Adapter<NewsListAdapter.ViewHolder>(){
         if (article.author.isEmpty()) holder.author.text = "Author data missing"
         else holder.author.text = "~${article.author}"
 
-        Picasso.get()
-            .load(article.urlToImage)
-            .placeholder(R.drawable.ic_launcher_background)
-            .fit()
-            .error(R.drawable.ic_launcher_foreground)
-            .centerCrop()
-            .into(holder.image)
+        Log.d("Url", article.urlToImage)
+
+        if (article.url.isBlank()){
+            Picasso.get()
+                .load(R.drawable.ic_launcher_foreground)
+                .fit()
+                .centerCrop()
+                .into(holder.image)
+        }
+        else {
+            Picasso.get()
+                .load(article.urlToImage)
+                .placeholder(R.drawable.ic_launcher_background)
+                .fit()
+                .error(R.drawable.ic_launcher_foreground)
+                .centerCrop()
+                .into(holder.image)
+        }
 
         holder.itemView.apply {
             setOnClickListener {
